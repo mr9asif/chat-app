@@ -1,11 +1,109 @@
-import React from 'react';
+import axios from 'axios'; // Make sure to import axios
+import React, { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa6";
+import { Link, useNavigate } from 'react-router-dom';
+import "../App.css";
 
 const Login = () => {
-    return (
-        <div>
-            login
-        </div>
-    );
+      const navigate = useNavigate();
+      const [pass, setPass]=useState(true);
+
+      const handleEye = ()=>{
+        setPass(!pass)
+      }
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const user = { email, password };
+
+    try {
+      const res = await axios.post('http://localhost:5000/login', user);
+      console.log('Login successful', res.data);
+     
+        
+      setCookie('token', res.data.data, 7);
+       toast.success('Successfully Login!')
+        navigate('/')
+      // Handle successful login (e.g., redirect, save token, etc.)
+    } catch (error) {
+      console.error('Error logging in:', error);
+      if (error.response) {
+        // Handle specific error responses
+        if (error.response.status === 401) {
+          toast.error('Incorrect email or password!')
+        }if(error.response.status === 400){
+          toast.error('Incorrect Password!')
+        } else {
+          alert('An error occurred while logging in. Please try again later.');
+        }
+      } else {
+        alert('Network error. Please check your connection.');
+      }
+    }
+  };
+
+  const setCookie = (name, value, days)=>{
+    
+    if(days){
+      let expires = "";
+      if (days) {
+          const date = new Date();
+          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+          expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+  }
+
+  return (
+    <div className='w-full h-screen  flex justify-center items-center register'>
+      <div>
+        <img
+          src="https://i.postimg.cc/XqRQQfDs/3d-man-holding-mobile-sign-in-with-security-key-illustration-png.png"
+          alt=""
+        />
+      </div>
+
+      <div className=' w-[35%] px-6 rounded-sm p-4 shadow-md bg-[#013650]'>
+        <h1 className='text-center text-3xl text-white font-bold'>Login</h1>
+        <form onSubmit={handleLogin}>
+          <label>
+            <h2 className='text-xl font-semibold text-white py-2'>Email</h2>
+            <input
+              className='text-sm w-full font-semibold outline-none p-2'
+              type="email"
+              name='email'
+              required // Consider adding required attribute for better UX
+            />
+          </label>
+          <label>
+            <h2 className='text-xl text-white font-semibold py-2'>Password</h2>
+           <div className='flex items-center border bg-white px-2'>
+           <input
+           className='text-sm w-full font-semibold outline-none p-2'
+           type={pass ? "password" : "text"}
+           name='password'
+           required // Consider adding required attribute for better UX
+         /><div onClick={handleEye} className='cursor-pointer'>{pass ?<FaEyeSlash /> : <FaEye />}</div>
+           </div>
+          </label>
+          <input
+            className='block w-full p-2 hover:bg-orange-700 mt-2 cursor-pointer text-xl font-semibold bg-orange-500 text-white'
+            type="submit"
+            value='Login'
+          />
+        </form>
+        <p className='text-xl text-white font-semibold my-3'>
+          Don't have an account? <Link to='/register' className='font-bold text-xl underline'>Register</Link>
+        </p>
+      </div>
+      <Toaster></Toaster>
+    </div>
+  );
 };
 
 export default Login;

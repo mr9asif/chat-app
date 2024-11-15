@@ -9,7 +9,7 @@ import "../App.css";
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
-  const [pass, setPass]=useState(false);
+  const [pass, setPass]=useState(true);
   const [pic, setPic]= useState();
 
   const postDetails = (pic)=>{
