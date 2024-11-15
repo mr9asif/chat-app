@@ -21,7 +21,7 @@ const Login = () => {
     const user = { email, password };
 
     try {
-      const res = await axios.post('http://localhost:5000/login', user);
+      const res = await axios.post('http://localhost:4000/api/user/login', user);
       console.log('Login successful', res.data);
      
         
@@ -35,13 +35,14 @@ const Login = () => {
         // Handle specific error responses
         if (error.response.status === 401) {
           toast.error('Incorrect email or password!')
+          console.log("invalid")
         }if(error.response.status === 400){
           toast.error('Incorrect Password!')
         } else {
-          alert('An error occurred while logging in. Please try again later.');
+          // alert('An error occurred while logging in. Please try again later.');
         }
       } else {
-        alert('Network error. Please check your connection.');
+        // alert('Network error. Please check your connection.');
       }
     }
   };

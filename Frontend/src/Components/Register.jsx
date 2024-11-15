@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from "react-hook-form";
 import toast, { Toaster } from 'react-hot-toast';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link, Navigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import "../App.css";
 import Loader from './Loader';
 
@@ -13,6 +13,7 @@ const Register = () => {
   const [pic, setPic]= useState();
   const [loading, setLoading] = useState(true);
   const [load, setLoad]= useState(true);
+    const navigate = useNavigate();
 
   useEffect(() => {
     // Simulate loading delay
@@ -74,20 +75,20 @@ const Register = () => {
       const res = await axios.post("http://localhost:4000/api/user/register", formData);
       console.log("Registration successful", res.data);
       toast.success('Successfully Registered!');
-      Navigate('/login');
+      navigate('/login');
     } catch (error) {
-      // if (error.response) {
-      //   // Check the response status
-      //   if (error.response.status === 401) {
-      //     toast.error("User already exists!");
-      //   } else {
-      //     toast.error('An error occurred while registering. Please try again.');
-      //     console.error('Error registering user:', error.response.data);
-      //   }
-      // } else {
-      //   toast.error('Network error or server not responding.');
-      //   console.error('Error registering user:', error.message);
-      // }
+      if (error.response) {
+        // Check the response status
+        if (error.response.status === 401) {
+          toast.error("User already exists!");
+        } else {
+          toast.error('An error occurred while registering. Please try again.');
+          console.error('Error registering user:', error.response.data);
+        }
+      } else {
+        toast.error('Network error or server not responding.');
+        console.error('Error registering user:', error.message);
+      }
       console.log(error)
     }
   };

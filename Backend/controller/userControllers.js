@@ -64,8 +64,8 @@ const authUser = asyncHanlder(async (req, res) => {
                 token: generateToken(exist._id),
             });
         } else {
-            res.status(401); // Unauthorized
-            throw new Error("Invalid email or password!");
+            res.status(401).send({message:"Invalid email or password"}); // Unauthorized
+            // throw new Error("Invalid email or password!");
         }
     } else {
         res.status(404); // Not Found
