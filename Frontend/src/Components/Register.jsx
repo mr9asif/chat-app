@@ -1,26 +1,59 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import toast, { Toaster } from 'react-hot-toast';
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa6";
 import { Link, Navigate } from 'react-router-dom';
 import "../App.css";
+import Loader from './Loader';
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [pass, setPass]=useState(true);
   const [pic, setPic]= useState();
+  const [loading, setLoading] = useState(true);
+  const [load, setLoad]= useState(true);
+
+  useEffect(() => {
+    // Simulate loading delay
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer); // Cleanup the timer
+  }, []);
 
   const postDetails = (pic)=>{
-     
+    setLoad(true);
+    //  if(pic === undefined){
+    //     toast.error("please add a image..")
+    //  }
+    if(pic.type === 'image/jpeg' || pic.type=== "image/png"){
+      const data = new FormData();
+      data.append('file', pic);
+      data.append('upload_preset', 'chat-app');
+      data.append('cloud_name', "asif-db")
+      fetch('https://api.cloudinary.com/v1_1/asif-db/image/upload', {
+        method:'post',
+        body:data
+      }).then(res=>res.json())
+      .then(data=>{
+        setPic(data.url.toString());
+        setLoad(false)
+      }).catch(err=>{
+        console.log(err)
+        toast.error('please select an Image')
+      })
+    }
   }
 
   const handleEye = ()=>{
     setPass(!pass)
   }
   
+  if(loading){
+    return <Loader></Loader>
+  }
   const onSubmit = async(data) => {
+    console.log(data)
     try {
       const res = await axios.post("http://localhost:5000/register", data);
       console.log("Registration successful", res.data);
@@ -105,6 +138,7 @@ const Register = () => {
             className='block w-full p-2 hover:bg-orange-700 mt-2 cursor-pointer text-xl font-semibold bg-orange-500 text-white'
             type="submit"
             value="Register"
+            loading={load}
           />
         </form>
         <p className='text-xl text-white font-semibold my-3'>

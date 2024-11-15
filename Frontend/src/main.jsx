@@ -4,7 +4,6 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import App from './App.jsx';
 import Home from './Components/Home.jsx';
 // import Login from './Components/Login.jsx';
 import Login from './Components/Login.jsx';
@@ -30,7 +29,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
   <RouterProvider router={router}>
   
-  <App />
+ 
   </RouterProvider>
   </StrictMode>,
 )
