@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require('cors');
 const ConnectDb = require("./Db/db");
 const userRoutes = require('./routes/userRoutes');
 const User = require("./Models/user");
@@ -10,6 +11,9 @@ const app = express();
 
 // middle man
 app.use(express.json());
+app.use(cors({
+    option:'http://localhost:5173',
+}))
 
 // api
 app.use('/api/user', userRoutes);
