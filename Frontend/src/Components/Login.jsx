@@ -21,12 +21,12 @@ const Login = () => {
     const user = { email, password };
 
     try {
-      const res = await axios.post('http://localhost:4000/api/user/login', user);
+      const res = await axios.post('http://localhost:4000/api/user/login', user,  { withCredentials: true } );
       console.log('Login successful', res.data);
      
         
       setCookie('token', res.data.data, 7);
-       toast.success('Successfully Login!')
+       toast.success('Successfully Login!');
         navigate('/')
       // Handle successful login (e.g., redirect, save token, etc.)
     } catch (error) {
@@ -38,12 +38,11 @@ const Login = () => {
           console.log("invalid")
         }if(error.response.status === 400){
           toast.error('Incorrect Password!')
-        } else {
-          // alert('An error occurred while logging in. Please try again later.');
+        } 
+        if(error.response.status === 404){
+          toast.error("User does not exist!")
         }
-      } else {
-        // alert('Network error. Please check your connection.');
-      }
+      } 
     }
   };
 

@@ -38,7 +38,7 @@ const registerUser= asyncHanlder(async (req, res) =>{
 
 
 
-
+// login
 const authUser = asyncHanlder(async (req, res) => {
     const { email, password } = req.body;
 
@@ -50,18 +50,22 @@ const authUser = asyncHanlder(async (req, res) => {
 
     // Find the user by email
     const exist = await User.findOne({ email });
+    
     if (exist) {
         // Compare the password
         const isMatch = await bycrpt.compare(password, exist.password);
-        console.log(isMatch)
+       
         if (isMatch) {
             // Send user data and token on success
+            generateToken(exist._id, res);
+            // console.log("res", res)
+
             res.status(200).json({
                 _id: exist._id,
                 name: exist.name,
                 email: exist.email,
                 pic: exist.pic,
-                token: generateToken(exist._id),
+            
             });
         } else {
             res.status(401).send({message:"Invalid email or password"}); // Unauthorized
@@ -73,7 +77,19 @@ const authUser = asyncHanlder(async (req, res) => {
     }
 });
 
+// all user
+const AllUser = asyncHanlder(async (req, res)=>{
+    const keyword = req.query.search ? {
+        $or:[
+            { name: {$regex: req.query.search, $options: "i"}  },
+            { email: {$regex: req.query.search, $options: "i"}  }
+        ]
+    } : {};
+    const user = await User.find(keyword);
+    res.send(user)
+})
 
 
 
-module.exports = {registerUser, authUser}
+
+module.exports = {registerUser, authUser, AllUser}
