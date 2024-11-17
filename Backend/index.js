@@ -8,6 +8,8 @@ const generateToken = require("./congig/jwtToken");
 require("dotenv").config();
 const cookieParser = require('cookie-parser');
 const isLogin = require("./MiddleWare/Islogin");
+const { logOut } = require("./controller/userControllers");
+
 const port = process.env.PORT;
 const app = express();
 
@@ -23,14 +25,16 @@ app.use(cors({
 // api
 app.use('/api/user', userRoutes);
 app.use("/api/msg", isLogin,msgRouter)
-
-
-
+app.use("/api/logout", logOut)
+app.use('/', isLogin)
+app.get('/m', (req, res)=>{
+ res.send({message:"hi"})
+})
 
 app.listen(port, ()=>{
     console.log(`server runnin on ${port}`)
     ConnectDb();
-    generateToken();
+    
     
 })
 

@@ -8,12 +8,15 @@ import Home from './Components/Home.jsx';
 // import Login from './Components/Login.jsx';
 import Login from './Components/Login.jsx';
 import Register from './Components/Register.jsx';
+import Context from './ContextApi/Context.jsx';
 import './index.css';
 
 const router =createBrowserRouter ([
       {
         path:'/',
-        element:<Home></Home>
+        element:
+        <Home></Home>
+        
       },
       {
         path:'/register',
@@ -27,9 +30,9 @@ const router =createBrowserRouter ([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  <RouterProvider router={router}>
-  
- 
-  </RouterProvider>
+     <Context>
+     <RouterProvider router={router}>
+     </RouterProvider>
+     </Context>
   </StrictMode>,
 )

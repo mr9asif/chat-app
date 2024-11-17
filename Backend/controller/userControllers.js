@@ -79,16 +79,34 @@ const authUser = asyncHanlder(async (req, res) => {
 });
 
 // Search user
-const AllUser = asyncHanlder(async (req, res)=>{
-    const keyword = req.query.search ? {
-        $or:[
-            { name: {$regex: req.query.search, $options: "i"}  },
-            { email: {$regex: req.query.search, $options: "i"}  }
-        ]
-    } : {};
-    const user = await User.find(keyword);
-    res.send(user)
-})
+ const getUserBySearch=async(req,res)=>{
+    try {
+        const search = req.query.search?.trim() || '';
+      
+        const currentUserID = req.user._id;
+        const user = await User.find({
+            $and:[
+                {
+                    $or:[
+                        {name:{$regex:'.*'+search+'.*',$options:'i'}},
+                        // {email:{$regex:'.*'+search+'.*',$options:'i'}}
+                    ]
+                },{
+                    _id:{$ne:currentUserID}
+                }
+            ]
+        }).select("-password").select("email")
+    
+        res.status(200).send(user)
+    
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: error
+        })
+        console.log(error);
+    }
+    }
 
 // current chateers..who log in
 const getCurrentChatters = async(req, res)=>{
@@ -123,6 +141,15 @@ const getCurrentChatters = async(req, res)=>{
     
 }
 
+// log out
+const logOut = (req, res)=>{
+     try {
+        res.clearCookie("jwt")
+    res.send("log out successfully")
+     } catch (error) {
+        res.send(error)
+     }
+}
 
 
-module.exports = {registerUser, authUser, AllUser, getCurrentChatters}
+module.exports = {registerUser, authUser, getUserBySearch, getCurrentChatters, logOut}

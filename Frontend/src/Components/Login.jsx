@@ -21,11 +21,11 @@ const Login = () => {
     const user = { email, password };
 
     try {
-      const res = await axios.post('http://localhost:4000/api/user/login', user,  { withCredentials: true } );
+      const res = await axios.post('/api/user/login', user,  { withCredentials: true } );
       console.log('Login successful', res.data);
      
-        
-      setCookie('token', res.data.data, 7);
+        const user2 =JSON.stringify(res.data);
+       localStorage.setItem("user",user2);
        toast.success('Successfully Login!');
         navigate('/')
       // Handle successful login (e.g., redirect, save token, etc.)
@@ -46,18 +46,7 @@ const Login = () => {
     }
   };
 
-  const setCookie = (name, value, days)=>{
-    
-    if(days){
-      let expires = "";
-      if (days) {
-          const date = new Date();
-          date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-          expires = "; expires=" + date.toUTCString();
-      }
-      document.cookie = name + "=" + (value || "") + expires + "; path=/";
-    }
-  }
+ 
 
   return (
     <div className='w-full h-screen  flex justify-center items-center register'>

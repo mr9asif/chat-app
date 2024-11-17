@@ -4,6 +4,7 @@ const User = require("../Models/user");
 const isLogin = async(req, res, next)=>{
      try {
         const token = req.cookies.jwt;
+        console.log(token)
         if(!token) return res.status(401).send({message:"user unauthorize"});
         const decode = jwt.verify(token, process.env.JWT_SECRET);
         if(!decode) return res.status(403).send({message:"token not varify"});
@@ -12,6 +13,7 @@ const isLogin = async(req, res, next)=>{
       //   console.log(user)
         
        req.user = user;
+       console.log("object")
         next()
      } catch (error) {
       console.log(error)
