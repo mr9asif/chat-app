@@ -1,7 +1,8 @@
 const asyncHanlder = require('express-async-handler');
 const bycrpt =require('bcryptjs');
 const User = require("../Models/user");
-const generateToken = require('../congig/jwtToken')
+const generateToken = require('../congig/jwtToken');
+const Conversation = require('../Models/conversasion');
 
 const registerUser= asyncHanlder(async (req, res) =>{
     const {name, email, password, pic}= req.body;
@@ -77,7 +78,7 @@ const authUser = asyncHanlder(async (req, res) => {
     }
 });
 
-// all user
+// Search user
 const AllUser = asyncHanlder(async (req, res)=>{
     const keyword = req.query.search ? {
         $or:[
@@ -89,7 +90,39 @@ const AllUser = asyncHanlder(async (req, res)=>{
     res.send(user)
 })
 
+// current chateers..who log in
+const getCurrentChatters = async(req, res)=>{
+      try {
+        const currentId = req.user._id;
+        
+        const currentChats = await Conversation.find({
+            participants:currentId
+          }).sort({updateAt:-1})
+        if(!currentChats || currentChats.length === 0) return res.status(201).send([]);
+           
+        
+        const partcipantsIDS = currentChats.reduce((ids,conversation)=>{
+            const otherParticipents = conversation.participants.filter(id => id !== currentId);
+            return [...ids , ...otherParticipents]
+        },[])
+       
+
+        const otherParticipentsIDS = partcipantsIDS.filter(id => id.toString() !== currentId.toString());
+        const user = await User.find({_id:{$in:otherParticipentsIDS}}).select("-password").select("-email");
+      
+   
+
+        const users = otherParticipentsIDS.map(id => user.find(user => user._id.toString() === id.toString()));
+
+        res.status(200).send(users)
+
+    
+      } catch (error) {
+        res.send(error)
+      }
+    
+}
 
 
 
-module.exports = {registerUser, authUser, AllUser}
+module.exports = {registerUser, authUser, AllUser, getCurrentChatters}

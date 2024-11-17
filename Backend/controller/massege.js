@@ -48,4 +48,22 @@ try {
 }
 }
 
-module.exports = sendMsg;
+// get msg
+const getMsg = async (req, res)=>{
+   try {
+    const {id:receiverId} = req.params;
+    const senderId = req.user._id;
+
+    const chats = await Conversation.findOne({
+      participants :{ $all:[senderId, receiverId]}
+    }).populate('messages');
+
+    if(!chats) return [];
+    const message = chats.messages;
+    res.status(201).send(message)
+   } catch (error) {
+     res.send(error)
+   }
+}
+
+module.exports = {sendMsg, getMsg};
