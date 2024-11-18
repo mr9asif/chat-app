@@ -9,6 +9,7 @@ import "../App.css";
 const Login = () => {
       const navigate = useNavigate();
       const [pass, setPass]=useState(true);
+      const [loading, setLoading]=useState(true);
 
       const handleEye = ()=>{
         setPass(!pass)
@@ -27,12 +28,14 @@ const Login = () => {
         const user2 =JSON.stringify(res.data);
        localStorage.setItem("user",user2);
        toast.success('Successfully Login!');
+       setLoading(false)
         navigate('/')
       // Handle successful login (e.g., redirect, save token, etc.)
     } catch (error) {
       console.error('Error logging in:', error);
       if (error.response) {
         // Handle specific error responses
+        setLoading(false)
         if (error.response.status === 401) {
           toast.error('Incorrect email or password!')
           console.log("invalid")

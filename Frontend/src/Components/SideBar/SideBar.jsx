@@ -1,6 +1,8 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
 import { IoArrowBackCircle } from "react-icons/io5";
+import { LuLogOut } from "react-icons/lu";
+import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../ContextApi/Context';
 import SUser from './SUser';
 import User from './User';
@@ -9,6 +11,19 @@ const SideBar = ({ searchUsers, isSearch, setIsSearch,  }) => {
     const { user } = useContext(AuthContext);
     
     const [chatUsers, setChatUsers] = useState([]);
+    const navigate = useNavigate();
+
+    const handleLogout= ()=>{
+        axios.post('/api/logout')
+        .then(res=>{
+            console.log(res.data)
+            localStorage.removeItem('user');
+            navigate('/login')
+            
+        }).catch(err=>{
+            console.log(err)
+        })
+    }
 
     useEffect(() => {
         const fetchChatUsers = async () => {
@@ -45,6 +60,7 @@ const SideBar = ({ searchUsers, isSearch, setIsSearch,  }) => {
             ) : (
                 <div>
                     {chatUsers.map(user => <User key={user._id} user={user} />)}
+                    <button onClick={handleLogout} className='border flex items-center gap-1 rounded-md p-2 bg-orange-500 hover:bg-orange-700 cursor-pointer text-white text-[12px] font-medium'> <LuLogOut className='text-xl font-medium' /> Log out </button>
                 </div>
             )}
         </div>

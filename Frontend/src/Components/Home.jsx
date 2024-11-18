@@ -39,7 +39,7 @@ const Home = () => {
         <input  type="submit" value="Search" className='border rounded bg-orange-400 hover:bg-orange-600 p-2  cursor-pointer text-xl font-medium' />
       </form>
       <div className=' '>
-         <img className='w-[60px] rounded-[50%]' src={user.pic} alt="" />
+         <img className='w-[60px] rounded-[50%]' src={user?.pic} alt="" />
       </div>
         </div>
            <SideBar  searchUsers ={searchUsers} isSearch={isSearch} setIsSearch={setIsSearch}></SideBar>
