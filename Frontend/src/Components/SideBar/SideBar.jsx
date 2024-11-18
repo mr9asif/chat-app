@@ -1,43 +1,52 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useState } from 'react';
+import { IoArrowBackCircle } from "react-icons/io5";
 import { AuthContext } from '../../ContextApi/Context';
+import SUser from './SUser';
 import User from './User';
 
-const SideBar = () => {
-      const {user} =useContext(AuthContext);
-     const [chatUsers, setChatUsers]=useState([]);
+const SideBar = ({ searchUsers, isSearch, setIsSearch,  }) => {
+    const { user } = useContext(AuthContext);
+    
+    const [chatUsers, setChatUsers] = useState([]);
 
-   
-
-      useEffect(()=>{
-           const chatUsers = async ()=>{
+    useEffect(() => {
+        const fetchChatUsers = async () => {
             try {
-                axios.get('/api/user/currentchattes')
-                .then(res=>{
-                 console.log(res.data)
-                 setChatUsers(res.data);
-                }).catch(err=>{
-                 console.log(err)
-                })
+                const res = await axios.get('/api/user/currentchattes');
+                setChatUsers(res.data);
             } catch (error) {
-                console.log(error)
+                console.error(error);
             }
-           }
-           chatUsers()
-      },[])
+        };
+        fetchChatUsers();
+    }, []);
 
+    const handleBack = ()=>{
+        setIsSearch(false);
+       
+    }
 
     return (
-        <div className=' bg-gray-300 w-[30%] h-screen p-5'>
-           
-          
-            
-             <div>
-                {
-                    chatUsers.map(user=> <User key={user.key} user={user}></User>)
-                }
-             </div>
-          
+        <div className="bg-gray-300 w-[30%] min-h-[70%] max-h-[80%] m overflow-y-auto scrollbar p-5">
+            {isSearch ? (
+                <div>
+                    {searchUsers.length > 0 ? (
+                        searchUsers.map(user => <SUser key={user._id} user={user} />)
+                    ) : (
+                        <div className='flex flex-col items-center px-2 mt-7'>
+                            <h1 className="text-xl font-bold  rounded-md py-2 px-4 text-center text-black mt-5">User not found 😒</h1>
+                        </div>
+                    )}
+                    <div className='b-0'>
+                    <IoArrowBackCircle onClick={handleBack}  className='text-4xl text-center cursor-pointer text-orange-500 ' />
+                    </div>
+                </div>
+            ) : (
+                <div>
+                    {chatUsers.map(user => <User key={user._id} user={user} />)}
+                </div>
+            )}
         </div>
     );
 };

@@ -82,6 +82,7 @@ const authUser = asyncHanlder(async (req, res) => {
  const getUserBySearch=async(req,res)=>{
     try {
         const search = req.query.search?.trim() || '';
+        if(!search) return res.status(400).send({message:"please give value"})
       
         const currentUserID = req.user._id;
         const user = await User.find({

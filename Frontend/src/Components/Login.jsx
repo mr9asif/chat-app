@@ -57,13 +57,13 @@ const Login = () => {
         />
       </div>
 
-      <div className=' w-[35%] px-6 rounded-sm p-4 shadow-md bg-[#013650]'>
+      <div className=' w-[35%] px-6 rounded-sm p-4 shadow-md bg-[#00233A]'>
         <h1 className='text-center text-3xl text-white font-bold'>Login</h1>
         <form onSubmit={handleLogin}>
           <label>
             <h2 className='text-xl font-semibold text-white py-2'>Email</h2>
             <input
-              className='text-sm w-full font-semibold outline-none p-2'
+              className='text-sm w-full bg-white font-semibold outline-none p-2'
               type="email"
               name='email'
               required // Consider adding required attribute for better UX
