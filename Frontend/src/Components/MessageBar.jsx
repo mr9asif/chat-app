@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { BsSendFill } from "react-icons/bs";
 import { AuthContext } from '../ContextApi/Context';
 import useConversation from '../zustand/useConversation';
 import Loader from './Loader';
@@ -10,6 +11,8 @@ const MessageBar = () => {
     const [loading, setLoading] = useState(false);
     const lastMessageRef = useRef();
     const {user}=useContext(AuthContext);
+    const [sending , setSending] = useState(false);
+    const [sendData , setSnedData] = useState("")
 
     useEffect(()=>{
        setTimeout(()=>{
@@ -38,7 +41,30 @@ const MessageBar = () => {
         }
             if (selectedConversation?._id) getMessages();
     },[selectedConversation, setMessages])
-    console.log(messages)
+
+    const handelMessages=(e)=>{
+        setSnedData(e.target.value)
+      }
+   
+      const handelSubmit=async(e)=>{
+        e.preventDefault();
+        setSending(true);
+        try {
+            const res =await axios.post(`/api/msg/send/${selectedConversation?._id}`,{messages:sendData});
+            const data = await res.data;
+            if (data.success === false) {
+                setSending(false);
+                console.log(data.message);
+            }
+            setSending(false);
+            setSnedData('')
+            setMessages([...messages,data])
+        } catch (error) {
+            setSending(false);
+            console.log(error);
+        }
+    }
+
     return (
         <div className='flex flex-col   h-screen w-full '>
             <div className='flex items-center h-[100px] px-6 justify-start bg-gray-300 gap-2'>
@@ -69,6 +95,19 @@ const MessageBar = () => {
                 </div>
               ))}
             </div>
+              <form onSubmit={handelSubmit} className='rounded-full text-black'>
+            <div className='w-full mx-auto border rounded-full flex items-center bg-gray-400'>
+              <input value={sendData} onChange={handelMessages} required id='message' type='text' 
+              className='w-full bg-transparent outline-none px-4 rounded-full'/>
+              <button type='submit'>
+                {sending ? <div className='loading loading-spinner'></div>:
+                <BsSendFill size={25}
+                className='text-sky-700 cursor-pointer rounded-full bg-gray-800 w-10 h-auto p-1'/>
+                }
+              </button>
+            </div>
+            </form>
+            
         </div>
     );
 };
