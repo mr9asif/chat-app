@@ -84,7 +84,7 @@ const Login = () => {
            </div>
           </label>
           <input
-            className='block w-full p-2 hover:bg-orange-700 mt-2 cursor-pointer text-xl font-semibold bg-orange-500 text-white'
+            className='block w-full p-2 hover:bg-blue-700 mt-2 cursor-pointer text-xl font-semibold bg-blue-500 text-white'
             type="submit"
             value='Login'
           />

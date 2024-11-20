@@ -1,28 +1,26 @@
-import React, { useState } from 'react';
-
-
+import React from "react";
+import useConversation from "../../zustand/useConversation";
 
 const User = ({ user }) => {
     const { name, pic, _id } = user;
-    const [selectUser, setSelectUser] = useState(null);
-   
+    const { selectedConversation, setSelectedConversation } = useConversation();
+    console.log(selectedConversation)
 
-    const handlSelecteUser = (userId) => {
-        console.log("User clicked:", userId);
-        setSelectUser(userId._id);
+    const handleSelectUser = (user) => {
+        console.log("User clicked:", user._id);
+        setSelectedConversation(user);
     };
 
-    console.log("Selected User:", selectUser); // Debugging line
-   
+    const isSelected = selectedConversation?._id === _id;
 
     return (
         <div
-            onClick={() => handlSelecteUser(user)}
-            className={`bg-gray-100 ${
-                selectUser === user?._id ? "bg-orange-400" : ""
-            } cursor-pointer w-full p-2 flex items-center gap-3 mb-2`}
+            onClick={() => handleSelectUser(user)}
+            className={`cursor-pointer w-full p-2 flex items-center gap-3 mb-2 ${
+                isSelected ? "bg-blue-500" : "bg-gray-100"
+            }`}
         >
-            <img className="w-[40px] rounded-[50%]" src={pic} alt="" />
+            <img className="w-[40px] h-[40px] rounded-full" src={pic} alt={`${name}'s avatar`} />
             <h1 className="text-2xl font-bold">{name}</h1>
         </div>
     );
