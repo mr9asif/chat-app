@@ -14,7 +14,7 @@ const Home = () => {
     const [isSearch, setIsSearch]= useState();
     const {setSelectedConversation, selectedConversation}=useConversation();
     
-   console.log(selectedConversation)
+  
     
     const handleSearch = e =>{
         e.preventDefault();
@@ -24,7 +24,7 @@ const Home = () => {
 
         axios.get(`/api/user/search/?search=${search}`)
         .then(res=>{
-            console.log(res)
+            
             
             setSearchUsers(res.data)
             setIsSearch(true);

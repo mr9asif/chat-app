@@ -4,10 +4,10 @@ import useConversation from "../../zustand/useConversation";
 const User = ({ user }) => {
     const { name, pic, _id } = user;
     const { selectedConversation, setSelectedConversation } = useConversation();
-    console.log(selectedConversation)
+    
 
     const handleSelectUser = (user) => {
-        console.log("User clicked:", user._id);
+      
         setSelectedConversation(user);
     };
 
