@@ -54,7 +54,7 @@ const Home = () => {
           <div className="w-[70%] h-full ">
                {selectedConversation == null ? <>
                       <div className='flex flex-col h-[200px]    items-center justify-center'>
-                          <h1 className="text-3xl font-bold text-[#133E87] text-center">Welcome to Chat🥰 {user.name}</h1>
+                          <h1 className="text-3xl font-bold text-[#133E87] text-center">Welcome to Chat🥰 {user?.name}</h1>
                           <h1 className='text-2xl font-semibold text-center text-gray-700'>Select or Search Someone to Chat 🔎</h1>
                           <img className="w-[60px] mt-2  " src="https://i.postimg.cc/fRGw12Xk/e57821f1317893d1c2d8e184d4f9d595-chat-bubble-icon.png" alt="" />
                       </div>

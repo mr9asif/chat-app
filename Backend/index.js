@@ -9,9 +9,11 @@ require("dotenv").config();
 const cookieParser = require('cookie-parser');
 const isLogin = require("./MiddleWare/Islogin");
 const { logOut } = require("./controller/userControllers");
+const { server, app } = require("./Socket/socket");
+
 
 const port = process.env.PORT;
-const app = express();
+
 
 
 // middle man
@@ -31,7 +33,7 @@ app.get('/m', (req, res)=>{
  res.send({message:"hi"})
 })
 
-app.listen(port, ()=>{
+server.listen(port, ()=>{
     console.log(`server runnin on ${port}`)
     ConnectDb();
     

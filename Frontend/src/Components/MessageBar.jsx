@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { BsSendFill } from "react-icons/bs";
+import notify from "../assets/notify.mp3";
 import { AuthContext } from '../ContextApi/Context';
+import { useSocketContext } from '../ContextApi/SocketContext';
 import useConversation from '../zustand/useConversation';
 import Loader from './Loader';
 
@@ -12,7 +14,25 @@ const MessageBar = () => {
     const lastMessageRef = useRef();
     const {user}=useContext(AuthContext);
     const [sending , setSending] = useState(false);
-    const [sendData , setSnedData] = useState("")
+    const [sendData , setSnedData] = useState("");
+    // const {socket, onlineUser } = useContext(SocketContext)
+    const {socket,onlineUser} = useSocketContext();
+   
+
+    useEffect(()=>{
+      socket?.on("newMessage",(newMessage)=>{
+        const sound = new Audio(notify);
+        sound.volume=0.1;
+        sound.play();
+        setTimeout(() => {
+          sound.pause(); // Stop playback
+          sound.currentTime = 0; // Reset to the start
+      }, 2000); // Stop after 2000 milliseconds (2 seconds)
+        setMessages([...messages,newMessage])
+      })
+
+      return ()=> socket?.off("newMessage");
+    },[socket,setMessages,messages])
 
     useEffect(()=>{
        setTimeout(()=>{
@@ -56,6 +76,8 @@ const MessageBar = () => {
                 setSending(false);
                 console.log(data.message);
             }
+
+       
             setSending(false);
             setSnedData('')
             setMessages([...messages,data])
@@ -78,7 +100,7 @@ const MessageBar = () => {
                     
                    {!loading && messages?.length > 0 && messages?.map((message) => (
                 <div className='text-white' key={message?._id} ref={lastMessageRef}>
-                  <div className={`chat ${message.senderId === user._id ? 'flex justify-end' : 'flex justify-start'}`}>
+                  <div className={`chat ${message.senderId === user?._id ? 'flex justify-end' : 'flex justify-start'}`}>
                     <div className='flex flex-col'></div>
                     <div className={`chat-bubble p-2 `}>
                       <p className={`p-2 rounded-md ${message.senderId === user._id ? 'bg-sky-600' : 'bg-gray-400'

@@ -9,6 +9,7 @@ import Home from './Components/Home.jsx';
 import Login from './Components/Login.jsx';
 import Register from './Components/Register.jsx';
 import Context from './ContextApi/Context.jsx';
+import { SocketContextProvider } from './ContextApi/SocketContext.jsx';
 import './index.css';
 
 const router =createBrowserRouter ([
@@ -31,8 +32,10 @@ const router =createBrowserRouter ([
 createRoot(document.getElementById('root')).render(
   <StrictMode>
      <Context>
-     <RouterProvider router={router}>
-     </RouterProvider>
+     <SocketContextProvider>
+     <RouterProvider router={router}></RouterProvider>
+     </SocketContextProvider>
+     
      </Context>
   </StrictMode>,
 )
