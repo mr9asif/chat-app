@@ -62,7 +62,7 @@ const SideBar = ({ searchUsers, isSearch, setIsSearch,  }) => {
             ) : (
                 <div className=' '>
                     <div className='min-h-[70vh] '>
-                    {chatUsers.map(user => <User key={user._id} user={user} />)}
+                    {chatUsers.map(user => <User chatUsers={chatUsers}  key={user._id} user={user} />)}
                     </div>
                     
                     <div className='h-[20%]'>

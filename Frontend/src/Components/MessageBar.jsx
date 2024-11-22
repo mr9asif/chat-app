@@ -5,7 +5,6 @@ import notify from "../assets/notify.mp3";
 import { AuthContext } from '../ContextApi/Context';
 import { useSocketContext } from '../ContextApi/SocketContext';
 import useConversation from '../zustand/useConversation';
-import Loader from './Loader';
 
 const MessageBar = () => {
     const {selectedConversation, setMessages, messages}=useConversation();
@@ -24,10 +23,7 @@ const MessageBar = () => {
         const sound = new Audio(notify);
         sound.volume=0.1;
         sound.play();
-        setTimeout(() => {
-          sound.pause(); // Stop playback
-          sound.currentTime = 0; // Reset to the start
-      }, 2000); // Stop after 2000 milliseconds (2 seconds)
+        // Stop after 2000 milliseconds (2 seconds)
         setMessages([...messages,newMessage])
       })
 
@@ -40,6 +36,8 @@ const MessageBar = () => {
        },1000)
     },[messages])
 
+    console.log(selectedConversation)
+
     useEffect(()=>{
          setLoading(true);
          const getMessages = async () => {
@@ -51,6 +49,9 @@ const MessageBar = () => {
                
                    setLoading(false);
                 setMessages(data);
+                }if(!data){
+                setLoading(false)
+                   data.length === 0
                 }
              
             } catch (error) {
@@ -90,12 +91,12 @@ const MessageBar = () => {
     return (
         <div className='flex flex-col   h-screen w-full '>
             <div className='flex items-center h-[100px] px-6 justify-start bg-gray-300 gap-2'>
-                <img className='w-[50px] rounded-[40px]' src={selectedConversation?.pic} alt="" />
+                <img className='w-[50px] h-[50px] rounded-[40px]' src={selectedConversation?.pic} alt="" />
                 <h1 className='text-[16px] text-white font-semibold'>{selectedConversation?.name}</h1>
             </div>
 
-            <div className='flex-1 h-full overflow-auto bg-gray-500'>
-                  {loading && <Loader></Loader>}
+            <div className='flex-1 h-full overflow-auto register'>
+                  {loading && <h1>Loading...</h1>}
                   {!loading && messages?.length == 0 && ( <div>send a msg to chat</div>) }
                     
                    {!loading && messages?.length > 0 && messages?.map((message) => (

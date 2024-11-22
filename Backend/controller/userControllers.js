@@ -5,7 +5,10 @@ const generateToken = require('../congig/jwtToken');
 const Conversation = require('../Models/conversasion');
 
 const registerUser= asyncHanlder(async (req, res) =>{
-    const {name, email, password, pic}= req.body;
+    const {name, email, password, image}= req.body;
+    console.log(req.body)
+  
+ 
     if(!name || !email || !password){
         res.status(400);
         throw new Error("Please enter all fields");
@@ -20,15 +23,16 @@ const registerUser= asyncHanlder(async (req, res) =>{
     const hash =await bycrpt.hash(password, salt);
 
     const user = await User.create({
-        name, email, password:hash, pic
+        name, email, password:hash, pic:image
     })
+    console.log(user)
     if(User){
         res.status(201).json({
             _id:user._id,
             name:user.name,
             email:user.email,
             password:user.password,
-            pic:user.pic,
+            pic:user.image,
             token:generateToken(user._id)
         })
     }else{

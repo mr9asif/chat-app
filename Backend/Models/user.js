@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     pic: {
       type: String,
-      default: "https://i.postimg.cc/QCBjLdMJ/blank-profile-picture-973460-1280.png",
+      // default: "https://i.postimg.cc/QCBjLdMJ/blank-profile-picture-973460-1280.png",
+      require:true
     },
   },
   { timestamps: true } // Correct spelling for timestamps
