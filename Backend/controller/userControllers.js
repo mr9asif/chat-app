@@ -1,8 +1,8 @@
-const asyncHanlder = require('express-async-handler');
-const bycrpt =require('bcryptjs');
-const User = require("../Models/user");
-const generateToken = require('../congig/jwtToken');
-const Conversation = require('../Models/conversasion');
+import asyncHanlder from 'express-async-handler';
+import generateToken from '../congig/jwtToken.js';
+import Conversation from '../Models/conversasion.js';
+import User from "../Models/user.js";
+
 
 const registerUser= asyncHanlder(async (req, res) =>{
     const {name, email, password, image}= req.body;
@@ -156,5 +156,5 @@ const logOut = (req, res)=>{
      }
 }
 
+export { authUser, getCurrentChatters, getUserBySearch, logOut, registerUser };
 
-module.exports = {registerUser, authUser, getUserBySearch, getCurrentChatters, logOut}

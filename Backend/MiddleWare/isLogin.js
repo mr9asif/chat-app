@@ -1,5 +1,6 @@
-const jwt = require("jsonwebtoken");
-const User = require("../Models/user");
+import jwt from "jsonwebtoken";
+import User from "../Models/user.js";
+
 
 const isLogin = async(req, res, next)=>{
      try {
@@ -13,7 +14,7 @@ const isLogin = async(req, res, next)=>{
       //   console.log(user)
         
        req.user = user;
-       console.log("object")
+      //  console.log("object")
         next()
      } catch (error) {
       console.log(error)
@@ -21,4 +22,4 @@ const isLogin = async(req, res, next)=>{
      }
 }
 
-module.exports = isLogin;
+export default isLogin;

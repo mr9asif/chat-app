@@ -1,6 +1,12 @@
-const express = require('express');
-const {registerUser, authUser, AllUser, getCurrentChatters, logOut, getUserBySearch} = require('../controller/userControllers');
-const isLogin = require('../MiddleWare/Islogin');
+import express from 'express';
+import {
+    authUser,
+    getCurrentChatters,
+    getUserBySearch,
+    logOut,
+    registerUser
+} from '../controller/userControllers.js';
+import isLogin from '../MiddleWare/Islogin.js';
 
 const router = express.Router();
 
@@ -11,5 +17,4 @@ router.get("/search",isLogin, getUserBySearch);
 router.get('/currentchattes',isLogin, getCurrentChatters)
 router.post("/", logOut)
 
-
-module.exports = router;
+export default router;

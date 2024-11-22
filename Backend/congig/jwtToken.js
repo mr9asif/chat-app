@@ -1,7 +1,9 @@
-const jwt = require('jsonwebtoken');
-const cookie = require('cookie-parser')
+import jwt from 'jsonwebtoken';
 
-require("dotenv").config();
+
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const generateToken = (id, res)=>{
     //  console.log(res)
@@ -19,4 +21,4 @@ const generateToken = (id, res)=>{
    }
 }
 
-module.exports= generateToken;
+export default generateToken;

@@ -1,12 +1,10 @@
-const {sendMsg, getMsg} = require("../controller/massege");
-const isLogin = require("../MiddleWare/Islogin");
-
-const express = require("express");
+import express from "express";
+import { getMsg, sendMsg } from "../controller/massege.js";
 
 const router = express.Router();
 
 router.post('/send/:id', sendMsg)
 router.get('/:id', getMsg)
 
-module.exports = router;
+export default router;
 

@@ -1,7 +1,7 @@
+import Conversation from "../Models/conversasion.js";
+import Message from "../Models/message.js";
+import { getReceiverSocketId, io } from "../Socket/socket.js";
 
-const Message = require("../Models/message")
-const Conversation = require("../Models/conversasion");
-const { getReceiverSocketId, io } = require("../Socket/socket");
 
 
 
@@ -71,4 +71,5 @@ const getMsg = async (req, res)=>{
    }
 }
 
-module.exports = {sendMsg, getMsg};
+export { getMsg, sendMsg };
+

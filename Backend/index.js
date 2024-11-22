@@ -1,16 +1,14 @@
-const express = require("express");
-const cors = require('cors');
-const ConnectDb = require("./Db/db");
-const userRoutes = require('./routes/userRoutes');
-const msgRouter = require('./routes/msgRoutes')
-const User = require("./Models/user");
-const generateToken = require("./congig/jwtToken");
-const path = require('path');
-require("dotenv").config();
-const cookieParser = require('cookie-parser');
-const isLogin = require("./MiddleWare/Islogin");
-const { logOut } = require("./controller/userControllers");
-const { server, app } = require("./Socket/socket");
+
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
+import express from "express";
+import path from 'path';
+import ConnectDb from './Db/db.js';
+import isLogin from './MiddleWare/Islogin.js';
+import { app, server } from './Socket/socket.js';
+import { logOut } from './controller/userControllers.js';
+import msgRouter from './routes/msgRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 
 const port = process.env.PORT || 4001;
